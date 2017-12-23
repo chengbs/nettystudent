@@ -25,8 +25,8 @@ public final class Client {
     public static void main(String[] args) throws Exception {
         // Configure SSL.
         final SSLContext sslCtx = SslContextFactory.getClientContext();
-        // 第三方证书
-//		final SSLContext sslCtx = ConventPFX.coverTokeyStore();
+        // 加载证书
+//		final SSLContext sslCtx = ConventPFX.getClientKeyStore();
 
         EventLoopGroup group = new NioEventLoopGroup();
         try {
