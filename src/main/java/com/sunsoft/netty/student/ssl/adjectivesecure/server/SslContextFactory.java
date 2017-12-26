@@ -45,10 +45,14 @@ public class SslContextFactory {
         }
 
         try {
+            // PFX文件中可以同时存在keystore和truststore的两本证书
             // keystore
-            KeyStore ks = KeyStore.getInstance("JKS");
-            ks.load(SslContextFactory.class.getClassLoader().getResourceAsStream("cert/client.keystore"),
+            KeyStore ks = KeyStore.getInstance("PKCS12");
+            ks.load(SslContextFactory.class.getClassLoader().getResourceAsStream("cert/client.pfx"),
                     keyStorePassword.toCharArray());
+//            KeyStore ks = KeyStore.getInstance("JKS");
+//            ks.load(SslContextFactory.class.getClassLoader().getResourceAsStream("cert/client.keystore"),
+//                    keyStorePassword.toCharArray());
 
             // Set up key manager factory to use our key store
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -62,10 +66,11 @@ public class SslContextFactory {
             // set up trust manager factory to use our trust store
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(ts);
+
             clientContext = SSLContext.getInstance(PROTOCOL);
             clientContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         } catch (Exception e) {
-            throw new Error("Failed to initialize the client-side SSLContext", e);
+            throw new Error("Failed to i nitialize the client-side SSLContext", e);
         }
 
         SERVER_CONTEXT = serverContext;
